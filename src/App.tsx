@@ -150,7 +150,7 @@ export default function App() {
                 <div className="list-avatar-crop">
                   <img src={msg.avatar} alt="" />
                 </div>
-                <span>{msg.from}</span>
+                <span>{`${msg.id}. ${msg.from}`}</span>
               </button>
             ))}
           </div>
