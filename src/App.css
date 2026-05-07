@@ -1,0 +1,610 @@
+:root {
+  --p5-red: #5a3944;
+  --p5-black: #000000;
+  --p5-white: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 🔒 disables page scroll (key fix) */
+  position: fixed; /* 🔒 kills iOS rubber band scrolling */
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial Black', sans-serif;
+}
+
+.p5-stage {
+  background-color: var(--p5-red);
+
+  background-image:
+    linear-gradient(45deg, #1a1a1a 25%, transparent 25%),
+    linear-gradient(-45deg, #1a1a1a 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #1a1a1a 75%),
+    linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+
+  background-size: 100px 100px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  height: 100dvh; /* ✅ modern fix for iOS Safari */
+  min-height: 100vh;
+
+  overflow: hidden;
+  perspective: 1200px;
+}
+
+.phone-tilt-wrapper {
+  transform: rotateX(10deg) rotateY(-15deg) rotateZ(3deg);
+  animation: float 6s ease-in-out infinite;
+  filter: drop-shadow(30px 50px 20px rgba(0, 0, 0, 0.5));
+  overflow-x: hidden;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: rotateX(10deg) rotateY(-15deg) rotateZ(3deg) translateY(0px);
+  }
+  50% {
+    transform: rotateX(12deg) rotateY(-12deg) rotateZ(4deg) translateY(-20px);
+  }
+}
+
+.phone-frame {
+  width: 360px;
+  height: 720px;
+  background: var(--p5-black);
+  border: 8px solid #111;
+  border-radius: 40px;
+  position: relative;
+  overflow: hidden;
+  outline: 3px solid white;
+}
+
+.scanline-overlay {
+  /* position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 10; */
+}
+
+.content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #e0e0e0;
+  color: black;
+  overflow-x: hidden; /* Prevent horizontal spill from skewed children */
+  width: 100%;
+}
+
+/* Ensure the scrollable area doesn't allow horizontal movement */
+.scrollable {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden; /* Force hide horizontal scroll */
+  padding-right: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.p5-panel {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide scrollbar but keep functionality */
+.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background: var(--p5-black);
+  border-radius: 10px;
+}
+
+.jagged-header {
+  background: black;
+  color: white;
+  padding: 10px 40px;
+  transform: rotate(-3deg) skew(-10deg);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
+  width: fit-content;
+  align-self: center;
+  box-shadow: 5px 5px 0px var(--p5-red);
+  flex-shrink: 0;
+}
+
+/* AVATAR STYLES */
+.avatar-frame,
+.list-avatar-crop {
+  width: 60px;
+  height: 60px;
+  background: var(--p5-black);
+  border: 3px solid white;
+  transform: rotate(-5deg);
+  overflow: hidden;
+  flex-shrink: 0;
+  z-index: 2;
+  box-shadow: 4px 4px 0px var(--p5-black);
+  outline: 2px solid var(--p5-black);
+}
+
+.avatar-frame img,
+.list-avatar-crop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.5); /* Persona portrait effect */
+}
+
+.list-avatar-crop {
+  width: 45px;
+  height: 45px;
+  border-width: 2px;
+}
+
+.home-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--p5-red);
+  padding: 30px;
+  position: relative;
+
+  background-image: url(assets/background_main.jpeg);
+  background-clip: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.music-container {
+  background-image: url(assets/background_playlist.jpeg);
+  background-clip: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.messages-container {
+  background-image: url(assets/background_messages.jpeg);
+  background-clip: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.home-container::before {
+  /* content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background-image: repeating-linear-gradient(
+    45deg,
+    black,
+    black 10px,
+    transparent 10px,
+    transparent 20px
+  ); */
+}
+
+/* .persona-logo-container {
+  margin-top: 40px;
+  transform: rotate(-7deg);
+  position: relative;
+  z-index: 2;
+} */
+/* .logo-box {
+  background: var(--p5-black);
+  color: white;
+  font-size: 2.2rem;
+  padding: 5px 15px;
+  width: fit-content;
+  margin-bottom: 5px;
+  font-style: italic;
+}
+.box-2 {
+  margin-left: 40px;
+  background: white;
+  color: black;
+} */
+
+.menu-vertical {
+  margin-top: auto;
+  margin-bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: relative;
+  z-index: 2;
+  width: 70%;
+}
+.menu-btn {
+  background: black;
+  color: white;
+  border: none;
+  padding: 18px;
+  text-align: left;
+  font-weight: 900;
+  font-size: 1.1rem;
+  cursor: pointer;
+  /* Shattered Shape */
+  clip-path: polygon(0 15%, 100% 0, 95% 85%, 5% 100%);
+  border-left: 5px solid var(--p5-red);
+  transition: 0.1s;
+}
+
+.menu-btn:hover {
+  transform: scale(1.05) rotate(-2deg);
+  background: white;
+  color: black;
+  box-shadow: 5px 5px 0px var(--p5-red);
+}
+
+.back-btn {
+  margin: 15px auto;
+  background: black;
+  color: white;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  cursor: pointer;
+  /* Shattered Shape */
+  clip-path: polygon(5% 0%, 100% 12%, 92% 100%, 0% 88%);
+  border-right: 4px solid var(--p5-red);
+  flex-shrink: 0;
+  transition: 0.1s;
+}
+
+.back-btn:hover {
+  background: white;
+  color: black;
+  transform: scale(1.1) skew(-5deg);
+  box-shadow: -5px 5px 0px var(--p5-red);
+}
+
+.track-card {
+  background: white;
+  color: black;
+  margin: 8px 0;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 10px solid black;
+  transform: skew(-5deg);
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.message-row {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 15px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.row-left {
+  flex-direction: row;
+}
+.row-right {
+  flex-direction: row-reverse;
+}
+
+.message-bubble-p5 {
+  padding: 12px 18px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  max-width: 70%;
+  position: relative;
+  z-index: 1;
+  line-height: 1.3;
+}
+
+.row-left .message-bubble-p5 {
+  background: white;
+  color: black;
+  margin-left: -5px;
+  clip-path: polygon(0 0, 100% 0, 95% 100%, 8% 100%, 0 85%);
+  border-left: 4px solid black;
+}
+
+.row-right .message-bubble-p5 {
+  background: black;
+  color: white;
+  margin-right: -5px;
+  clip-path: polygon(5% 0, 100% 0, 100% 85%, 92% 100%, 0 100%);
+}
+
+.p5-list-item {
+  width: 100%;
+  background: white;
+  color: black;
+  border: none;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  clip-path: polygon(0% 5%, 100% 0%, 98% 95%, 2% 100%);
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+.p5-list-item:hover {
+  background: var(--p5-red);
+  color: white;
+}
+
+/* THE MAIN BUTTON CONTAINER */
+.p5-control-btn {
+  all: unset; /* Reset default button styles */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--p5-black);
+  color: var(--p5-white);
+  padding: 8px 20px;
+  font-family: 'Arial Black', sans-serif;
+  font-size: 0.9rem;
+  transition:
+    transform 0.1s ease,
+    background 0.1s ease;
+
+  /* Shattered rectangle shape */
+  clip-path: polygon(12% 0%, 100% 0%, 88% 100%, 0% 100%);
+  border-right: 4px solid var(--p5-red);
+}
+
+.p5-control-btn:hover {
+  background: var(--p5-red);
+  color: var(--p5-white);
+  transform: scale(1.1) rotate(-3deg);
+  box-shadow: 5px 5px 0px var(--p5-black);
+}
+
+.p5-control-btn:active {
+  transform: scale(0.9) rotate(2deg);
+}
+
+/* THE ICON SHAPES */
+.p5-icon-container {
+  width: 14px;
+  height: 14px;
+  /* Removed background: var(--p5-white); 🚩 This was the cause */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.p5-icon-shape {
+  width: 100%;
+  height: 100%;
+  /* This uses the text color (white or black depending on hover) */
+  background-color: currentColor;
+  /* Play Triangle */
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+  transition: clip-path 0.2s ease-in-out;
+}
+
+/* Playing state: Change triangle to square */
+.p5-control-btn.is-playing .p5-icon-shape {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+/* Red accent for the text when active */
+.p5-btn-text {
+  letter-spacing: 1px;
+  font-style: italic;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  background: var(--p5-red);
+  padding: 5px 20px;
+  transform: skew(-15deg) rotate(-2deg);
+  box-shadow: 6px 6px 0px black;
+}
+
+.loading-bar-rail {
+  width: 300px;
+  height: 30px;
+  background: white;
+  transform: skew(-20deg);
+  position: relative;
+  overflow: hidden;
+  border: 4px solid black;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: var(--p5-red);
+  transition: width 0.3s ease-out;
+  position: relative;
+}
+
+/* Diagonal stripes on the loading bar */
+.loading-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
+}
+
+.loading-percent {
+  margin-top: 15px;
+  font-size: 2rem;
+  font-style: italic;
+  text-shadow: 4px 4px var(--p5-red);
+}
+.persona-logo-container {
+  margin-top: 40px;
+  position: relative;
+  z-index: 2;
+  /* Rotate container slightly less, individual boxes handle skew */
+  transform: rotate(-3deg);
+}
+
+.logo-box {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 2rem;
+  padding: 5px 20px;
+  width: fit-content;
+  font-style: italic;
+  text-transform: uppercase;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Create the sharp, glittering edge effect on the boxes themselves */
+  box-shadow:
+    3px 3px 0px rgba(255, 255, 255, 0.8),
+    /* Inner "glitter" edge */ 8px 8px 0px var(--p5-black); /* Main offset shadow */
+}
+
+/* Base style for Box 1 (Top) */
+.box-1 {
+  background: var(--p5-black);
+  color: white;
+  transform: skew(-15deg) rotate(-2deg);
+  z-index: 2;
+  margin-left: -10px;
+}
+
+/* Base style for Box 2 (Bottom) */
+.box-2 {
+  background: white;
+  color: black;
+  margin-left: 50px;
+  transform: skew(-10deg) rotate(3deg);
+  z-index: 1;
+}
+
+/* The Glittering Shine Pseudo-element */
+.logo-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    /* Bright white "glitter" pulse */ transparent
+  );
+  transform: skewX(-20deg);
+  animation: logo-glitter 4s infinite;
+}
+
+/* Box 1 glitter color tweak (more red/silver) */
+.box-1::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ffc4c4,
+    /* Reddish/Silver light */ transparent
+  );
+  animation-delay: 0.5s; /* Stagger animations */
+}
+
+/* Box 2 glitter color tweak (pure sharp white) */
+.box-2::after {
+  animation-delay: 2s; /* Stagger animations */
+}
+
+/* Text animation to shake slightly on glitter pulse */
+.logo-box span {
+  display: block;
+  animation: text-jitter 4s infinite;
+}
+.box-1 span {
+  animation-delay: 0.5s;
+}
+.box-2 span {
+  animation-delay: 2s;
+}
+
+/* KEYFRAMES */
+
+/* Glitter/Shine animation sweeping across */
+@keyframes logo-glitter {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  20% {
+    left: 100%;
+    opacity: 0;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Subtle jitter when glitter passes */
+@keyframes text-jitter {
+  0%,
+  9%,
+  21%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  10% {
+    transform: translate(-2px, 1px) scale(1.02);
+    color: #ff0000;
+  } /* Temporary red "glitch" */
+  12% {
+    transform: translate(2px, -1px) scale(1.01);
+  }
+  14% {
+    transform: translate(-1px, -1px) scale(1.01);
+  }
+  16% {
+    transform: translate(1px, 1px) scale(1);
+    color: inherit;
+  }
+}
